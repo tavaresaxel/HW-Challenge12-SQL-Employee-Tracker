@@ -39,6 +39,12 @@ function menu() {
             else if (response.option === "update an employee role") {
                 updateEmployee()
             }
+            else if (response.option === "view all departments") {
+                viewAllDepartments()
+            }
+            else if (response.option === "add a department") {
+                addDepartment()
+            }
         })
 }
 
@@ -155,4 +161,44 @@ function viewAllEmployees() {
         printTable(data)
         menu()
     })
+}
+
+function viewAllDepartments() {
+    db.query(`SELECT * FROM department;
+    `, (err, data) => {
+
+        printTable(data)
+        menu()
+    })
+}
+
+function addDepartment() {
+
+    db.query(`SELECT * from department`, (err, roleData) => 
+            {
+            inquirer.prompt([{
+                type: "input",
+                message: "Name of new department",
+                name: "department"
+            }
+            ])
+            .then(response => {
+
+
+
+                db.query(`INSERT INTO department(name)
+                VALUES ("${response.department}")`, (err) => {
+
+                    viewAllDepartments() 
+                })
+
+            })
+
+        })
+           
+    
+
+
+
+
 }
