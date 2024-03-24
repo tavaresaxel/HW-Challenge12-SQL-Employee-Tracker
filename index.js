@@ -45,6 +45,9 @@ function menu() {
             else if (response.option === "add a department") {
                 addDepartment()
             }
+            else{
+                addRole()
+            }
         })
 }
 
@@ -66,13 +69,15 @@ function updateEmployee() {
                 message: "which employee do you want to update his or her new title?",
                 name: "employee_id",
                 choices: employeeData
-            }
+            },
+            
+        
             ])
             .then(response => {
 
 
 
-                db.query(`UPDATE employee SET role_id=${response.role_id} WHERE id=${response.employee_id} `, (err) => {
+                db.query(`UPDATE employee SET role_id=${response.role_id} WHERE id=${response.employee_id}  `, (err) => {
 
                     viewAllEmployees()
                 })
@@ -172,6 +177,7 @@ function viewAllDepartments() {
     })
 }
 
+
 function addDepartment() {
 
     db.query(`SELECT * from department`, (err, roleData) => 
@@ -197,8 +203,41 @@ function addDepartment() {
         })
            
     
+}
+
+function addRole() {
+
+    db.query(`SELECT tile from role`, (err, roleData) => 
+            {
+            inquirer.prompt([{
+                type: "input",
+                message: "Name of new role",
+                name: "title"
+            },
+            {
+                type: "input",
+                message: "Please input department ID ",
+                name: "department_id",
+               
+            },
+            {
+                type: "input",
+                message: "Salary amount",
+                name: "salary"
+            }
+            ])
+            .then(response => {
 
 
 
+                db.query(`INSERT INTO role(title, department_id, salary)VALUES ("${response.title}","${response.department_id}","${response.salary}")`, (err) => {
 
+                    viewAllRoles() 
+                })
+
+            })
+
+        })
+           
+    
 }
